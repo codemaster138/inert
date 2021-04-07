@@ -55,7 +55,7 @@ export const initCommand = new Command("init")
     });
 
     spinner.succeed().start("Setting up template");
-    rmSync(join(dir, ".git"), { recursive: true, force: true }); // Remove the .git directory
+    if (existsSync(join(dir, '.git'))) rmSync(join(dir, ".git"), { recursive: true, force: true }); // Remove the .git directory
 
     if (!existsSync(join(dir, "inert.config.js"))) {
       spinner.stop();
@@ -72,6 +72,8 @@ export const initCommand = new Command("init")
         await fsPromises.rm(dir, { recursive: true, force: true });
         spinner.color = "white";
         spinner.succeed("Operation canceled");
+        process.exit();
       }
     }
+    spinner.succeed();
   });
