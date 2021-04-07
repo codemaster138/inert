@@ -1,4 +1,4 @@
-import { cyan } from "chalk";
+import { cyan, gray } from "chalk";
 import { prompt } from "enquirer";
 import execa from "execa";
 import { existsSync, promises as fsPromises, rmSync } from "fs";
@@ -25,7 +25,10 @@ export const initCommand = new Command("init")
       info("Using default template");
     }
 
-    const spinner = ora("Downloading Template").start();
+    const spinner = ora({
+      text: "Donwloading Template",
+      indent: 2
+    }).start();
     const repo = repoName(template);
     if (repo === false) {
       spinner.stop();
@@ -55,7 +58,8 @@ export const initCommand = new Command("init")
     });
 
     spinner.succeed().start("Setting up template");
-    if (existsSync(join(dir, '.git'))) rmSync(join(dir, ".git"), { recursive: true, force: true }); // Remove the .git directory
+    if (existsSync(join(dir, ".git")))
+      rmSync(join(dir, ".git"), { recursive: true, force: true }); // Remove the .git directory
 
     if (!existsSync(join(dir, "inert.config.js"))) {
       spinner.stop();
@@ -76,4 +80,11 @@ export const initCommand = new Command("init")
       }
     }
     spinner.succeed();
+
+    info("");
+    info(`Successfully set up yout project!`);
+    info("");
+    info(`Here's a few things you can do:`);
+    info(`${gray('$')} cd ${cyan(dir)}  ${gray('// Enter your project directory')}`);
+    info(`${gray('$')} inert ${cyan('build')}  ${gray('// Build your project')}`);
   });
