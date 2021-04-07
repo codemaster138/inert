@@ -1,0 +1,177 @@
+/**
+ * The inert object is provided to us by the inert compiler. It contains a whole lot of helper functions
+ * to do all kinds of things for us, like optimize images and compile sass or markdown
+ */
+const { sass, write, writeFile, copy, webpify, htmlBuild, singleHTMLBuild, markdown } = inert;
+
+/**
+ * This is the inert configuration file. It contains all the information inert needs to build this template.
+ */
+
+module.exports = {
+  build: {
+    /**
+     * A list of additional methods and objects that will be available in ejs tags inside the templates
+     */
+    globals: [require, inert],
+
+    templates: {
+      home: "templates/home.ejs",
+      post: "templates/post.ejs",
+    },
+
+    sourceDirs: {
+      /**
+       * Directory containing style files. This template uses SCSS (sass) for styling.
+       */
+      scss: "scss",
+      /**
+       * Directory containing additional static assets. These will be copied to the `assets`
+       * output directory and some image might be optimized
+       */
+      assets: "assets",
+      /**
+       * Since this is a blog template, this directory will contain posts.
+       */
+      posts: "posts",
+    },
+
+    /**
+     * Output directories. Each key can be referenced from helper methods.
+     */
+    outDirs: {
+      /**
+       * Main output directory. The name htmlOutput is only a convention.
+       */
+      htmlOutput: "public",
+      /**
+       * Output for SASS Files. :htmlOutput: will be replaced with the value of the htmlOutput property.
+       * This also applies to all other properties of this object.
+       */
+      sassOutput: ":htmlOutput:/style",
+      /**
+       * Output for other static assets
+       */
+      assets: ":htmlOutput:/assets",
+      /**
+       * Here, we'll store optimized static assets
+       */
+      optimizedAssets: ":assets:/optimized",
+      /**
+       * Output for optimized webp images
+       */
+      webpAssets: ":optimizedAssets:/webp",
+      /**
+       * Output for posts
+       */
+      postOutput: ":htmlOutput:/posts",
+    },
+
+    rootFile: "templates/home.ejs",
+    /**
+     * Like the `filePipeline` porperty of the `folders`, but only runs once, for the root file.
+     */
+    slashPipeline: [
+      /**
+       * Builds the given file using the EJS library.
+       */
+      singleHTMLBuild(),
+      /**
+       * Like `write`, but writes only a single file.
+       */
+      writeFile(":htmlOutput:/index.html")
+    ],
+
+    /**
+     * A list of objects.
+     *
+     * Each object point to a specfic folder and contains info about how to build it.
+     */
+    folders: [
+      {
+        /**
+         * A key in the `sourceDirs` object which point to the path to the folder
+         */
+        folder: "scss",
+        /**
+         * How to build the folder
+         */
+        build: {
+          /**
+           * How to traverse the folder.
+           * Acceptable values: `flat` (single-level traversal) and `recursive` (also traverse subfolders)
+           *
+           * `flat` is a little faster, so If you can, you should use it.
+           */
+          traverseLevel: "flat", // There will be no subfolders, at least in this template
+          /**
+           * A list of methods.
+           *
+           * After the folder is traversed, the first method is called with the entire configuration as a
+           * first argument and the first file as the second argument, then the second function is called
+           * with the first method's result as an addition third argument, then the third method with the
+           * result from the second as third argument, and so on. This is repeated for each file.
+           */
+          filePipeline: [
+            /**
+             * Uses the `sass` package to compile the file. Will always throw on sass compiler error.
+             */
+            sass(),
+            /**
+             * Writes the previous method's output to a file with the same name in the specified directory.
+             * The `directory` option should **not** contain a path to a directory, but instead point to a
+             * key in the `outDirs` object, which in turn contains a path.
+             */
+            write("sassOutput"),
+          ],
+        },
+      },
+      {
+        folder: "assets",
+        build: {
+          traverseLevel: "recursive",
+          filePipeline: [
+            /**
+             * This helper method copies the file into the assets folder. Again, don't specify a path, but
+             * rather a key from `outDirs` object
+             */
+            copy("assets"),
+            /**
+             * This method converts any PNG and JPEG images into optimized WebP. The old images are also kept.
+             * Non-PNG/JPEG assets are completely ignored.
+             */
+            webpify("webpAssets"),
+          ],
+        },
+      },
+      {
+        folder: "posts",
+        build: {
+          traverseLevel: "recursive",
+          filePipeline: [
+            /**
+             * Compiles the content of markdown files into HTML. Does not save the result. If the argument
+             * `true` is passed, it will throw an error when it encounters a non-markdown file. Will always
+             * throw on markdown error.
+             */
+            markdown(),
+            /**
+             * This function takes an ejs file as an argument and builds it with the global `data` set to
+             * the value of the previous method's result. If this is the first method, the raw content
+             * of the given file is used. Will always throw on EJS error.
+             *
+             * As most blogs are monolingual, we will not be including any fancy i18n stuff here, although
+             * you can if you want to.
+             */
+            htmlBuild("post"),
+            /**
+             * Like in the `sass` folder's pipeline, the `write` method takes the output of the previous `htmlBuild`
+             * method and writes it to a file with the same name in the specified directory.
+             */
+            write("postOutput"),
+          ],
+        },
+      },
+    ],
+  },
+};
