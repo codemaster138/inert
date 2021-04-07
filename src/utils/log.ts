@@ -1,4 +1,4 @@
-import { cyan, gray, red, white } from "chalk";
+import { cyan, gray, red, white, yellow } from "chalk";
 import stringLength from "string-length";
 import wrapAnsi from "wrap-ansi";
 import { performance } from "perf_hooks";
@@ -35,4 +35,27 @@ export function info(...message: string[]) {
 
 export function error(...message: string[]) {
   _msg("error", console.error, red, ...message);
+}
+
+export function warn(...message: string[]) {
+  _msg("warn", console.error, yellow, ...message);
+}
+
+export class Logger {
+  enabled: boolean;
+  constructor(enabled?: boolean) {
+    this.enabled = enabled ?? true;
+  }
+
+  info(...message: string[]) {
+    if (this.enabled) _msg("info", console.log, cyan, ...message);
+  }
+
+  error(...message: string[]) {
+    if (this.enabled) _msg("error", console.error, red, ...message);
+  }
+
+  warn(...message: string[]) {
+    if (this.enabled) _msg("warn", console.error, yellow, ...message);
+  }
 }

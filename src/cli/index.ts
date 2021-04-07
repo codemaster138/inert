@@ -2,6 +2,7 @@ import getPackageVersion from "@jsbits/get-package-version";
 import { Command } from "tauris";
 import { error } from "../utils/log";
 import { initCommand } from "./commands/init";
+import { buildCommand } from "./commands/build";
 
 (async () => {
   const argv = new Command("inert")
@@ -12,6 +13,7 @@ import { initCommand } from "./commands/init";
       type: "boolean",
     })
     .command(initCommand)
+    .command(buildCommand)
     .demandArgument()
     .parse(process.argv.slice(2));
   if (!argv) return; // No arguments provided, just do nothing
