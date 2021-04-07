@@ -2,6 +2,7 @@ import { Logger } from "../../utils/log";
 import { promises as fsPromises, existsSync } from 'fs';
 import { resolve, join } from "path";
 import { cyan, gray } from "chalk";
+import * as buildUtils from "./user-utils";
 
 export interface BuildOptions {
   logging?: boolean;
@@ -25,6 +26,9 @@ export default async function build(options: BuildOptions) {
     return false;
   }
 
-  log.info('Done!');
+  // Load the configuration file
+  (global as any).inert = buildUtils; // Allthough this is generally considered bad practice, I think it works very well for this purpose.
+  const config = require(join(project_dir, 'inert.config.js'));
+
   return true;
 }
