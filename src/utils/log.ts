@@ -1,4 +1,4 @@
-import { cyan, gray, red, white, yellow } from "chalk";
+import { blue, cyan, gray, red, white, yellow } from "chalk";
 import stringLength from "string-length";
 import wrapAnsi from "wrap-ansi";
 import { performance } from "perf_hooks";
@@ -33,6 +33,10 @@ export function info(...message: string[]) {
   _msg("info", console.log, cyan, ...message);
 }
 
+export function verb(...message: string[]) {
+  _msg("verb", console.log, blue, ...message);
+}
+
 export function error(...message: string[]) {
   _msg("error", console.error, red, ...message);
 }
@@ -43,12 +47,18 @@ export function warn(...message: string[]) {
 
 export class Logger {
   enabled: boolean;
-  constructor(enabled?: boolean) {
+  verbose: boolean;
+  constructor(enabled?: boolean, verbose?: boolean) {
     this.enabled = enabled ?? true;
+    this.verbose = verbose ?? false;
   }
 
   info(...message: string[]) {
     if (this.enabled) _msg("info", console.log, cyan, ...message);
+  }
+
+  verb(...message: string[]) {
+    if (this.enabled) _msg("verb", console.log, blue, ...message);
   }
 
   error(...message: string[]) {

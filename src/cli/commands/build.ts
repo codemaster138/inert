@@ -1,8 +1,8 @@
 import { Command } from "tauris";
 import { build } from "../../core";
 import { performance } from "perf_hooks";
-import { info } from "../../utils/log";
 import { cyan, red } from "chalk";
+import ora from "ora";
 
 export const buildCommand = new Command("build")
   .describe('Build an inert project. Only works when run from an inert project directory.')
@@ -12,8 +12,11 @@ export const buildCommand = new Command("build")
     type: 'boolean',
   })
   .handler(async (argv: { [key: string]: any }) => {
+    const spinner = ora({ text: 'Building project', indent: 0 }).start();
     const start = performance.now();
-    const successState = await build({ logging: true });
+    const successState = await build({ logging: true, spinner: spinner });
+    spinner.stop();
     console.log();
-    info(`Operation ${successState ? cyan('succeeded') : red('failed')} in ${cyan(`${performance.now() - start}ms`)}`);
+    spinner.start();
+    spinner[successState ? 'succeed' : 'fail'](`Operation ${successState ? cyan('succeeded') : red('failed')} in ${cyan(`${Math.floor(performance.now() - start)}ms`)}`);
   });
