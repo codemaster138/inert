@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import getPackageVersion from "@jsbits/get-package-version";
 import { Command } from "tauris";
 import { error } from "../utils/log";
