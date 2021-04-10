@@ -5,7 +5,6 @@
   "main": "dist/core/index.js",
   "scripts": {
     "build": "tsc",
-    "preinstall": "echo \"Removing old inert CLI...\" && npm rm -g inert-cli",
     "prepare": "npm run build"
   },
   "bin": {
