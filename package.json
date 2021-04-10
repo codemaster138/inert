@@ -4,7 +4,12 @@
   "description": "A static site generator for the modern web",
   "main": "dist/core/index.js",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "preinstall": "echo \"Removing old inert CLI...\" && npm rm -g inert-cli",
+    "prepublish": "npm run build"
+  },
+  "bin": {
+    "inert": "./dist/cli/index.js"
   },
   "repository": "https://github.com/codemaster138/inert",
   "author": "Jake Sarjeant <pygamer138@gmail.com>",
@@ -16,11 +21,11 @@
     "@types/prismjs": "^1.16.4",
     "@types/sass": "^1.16.0",
     "@types/sharp": "^0.28.0",
+    "@types/wrap-ansi": "^3.0.0",
     "typescript": "^4.2.3"
   },
   "dependencies": {
     "@jsbits/get-package-version": "^1.0.3",
-    "@types/wrap-ansi": "^3.0.0",
     "chalk": "^4.1.0",
     "ejs": "^3.1.6",
     "enquirer": "^2.3.6",
