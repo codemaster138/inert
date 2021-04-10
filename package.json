@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "preinstall": "echo \"Removing old inert CLI...\" && npm rm -g inert-cli",
-    "prepublish": "npm run build"
+    "prepare": "npm run build"
   },
   "bin": {
     "inert": "./dist/cli/index.js"
