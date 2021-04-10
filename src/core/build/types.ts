@@ -1,5 +1,5 @@
 export interface InertConfig {
-  custom: { [key: string]: any };
+  custom?: { [key: string]: any };
   build: {
     globals: any[];
 
@@ -49,4 +49,5 @@ export interface InertFile {
    * Path to containing directory, may be absolute or relative
    */
   dirname: string;
+  relative: string;
 }

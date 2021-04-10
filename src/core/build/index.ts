@@ -4,10 +4,10 @@ import { resolve, join } from "path";
 import { cyan, gray } from "chalk";
 import * as buildUtils from "./user-utils";
 import { InertConfig } from "./types";
-import { resolveOutDir, resolveSourceDir } from "./utils/dirs";
+import { resolveOutDir, resolveSourceDir, resolveTemplate } from "./utils/dirs";
 import { Ora } from "ora";
 import traverse from "./utils/traverse";
-import { getFileInfo } from "./utils/file";
+import { getFileInfo } from "./utils/file";
 
 export interface BuildOptions {
   logging?: boolean;
@@ -39,7 +39,10 @@ export default async function build(options: BuildOptions) {
 
   // Load the configuration file
   (global as any).inert = buildUtils; // Allthough this is generally considered bad practice, I think it works very well for this purpose.
-  const config: InertConfig = require(join(project_dir, "inert.config.js"));
+  var config: InertConfig = require(join(project_dir, "inert.config.js"));
+  config.custom = config.custom || {};
+  config.custom.spinner = options.spinner;
+  config.custom.log = log;
 
   // Make sure each source directory exists
   if (
@@ -50,23 +53,28 @@ export default async function build(options: BuildOptions) {
       .some((v) => v === false)
   ) {
     options.spinner?.stop();
-    log.error(`Missing some source directories. Make sure every directory defined in 'config.build.sourceDirs' exists`);
+    log.error(
+      `Missing some source directories. Make sure every directory defined in 'config.build.sourceDirs' exists`
+    );
     options.spinner?.start();
     return false;
   }
 
   // Set up output directory
-  const out_dir = join(project_dir, resolveOutDir(config, ':output:'));
+  const out_dir = join(project_dir, resolveOutDir(config, ":output:"));
   options.spinner?.stop();
   if (existsSync(out_dir)) {
-    log.verb('Output directory already exists');
+    log.verb("Output directory already exists");
   } else {
     log.verb(`Creating output directory: ${out_dir}`);
     await fsPromises.mkdir(out_dir);
   }
   // Create subdirs
   for (let outdir in config.build.outDirs) {
-    await fsPromises.mkdir(join(project_dir, resolveOutDir(config, config.build.outDirs[outdir])), { recursive: true });
+    await fsPromises.mkdir(
+      join(project_dir, resolveOutDir(config, config.build.outDirs[outdir])),
+      { recursive: true }
+    );
   }
   options.spinner?.start();
 
@@ -80,22 +88,43 @@ export default async function build(options: BuildOptions) {
     log.verb(`Building ${cyan(path)}`);
     options.spinner?.start();
 
-    const files = (await traverse(path, false, folder.build.traverseLevel === 'rescursive' ? true : false)) as string[];
+    const files = (await traverse(
+      path,
+      false,
+      folder.build.traverseLevel === "rescursive" ? true : false
+    )) as string[];
     // Iterate over all files
     for (const file of files) {
       // Run the build pipeline
       let prev_res: any = undefined;
-      for (const pipe of folder.build.filePipeline) {
-        // Make sure `pipe` is a function; not everyone uses typescript
-        if (typeof pipe !== 'function') {
+      for (const step of folder.build.filePipeline) {
+        // Make sure `step` is a function; not everyone uses typescript
+        if (typeof step !== "function") {
           options.spinner?.stop();
-          log.warn('Pipeline component is not a function. Skipping. Please make sure all elements in the filePipeline are functions.');
+          log.warn(
+            "Pipeline component is not a function. Skipping. Please make sure all elements in the filePipeline are functions."
+          );
           options.spinner?.start();
           continue;
         }
-        prev_res = pipe(config, getFileInfo(file), prev_res);
+        prev_res = await step(config, getFileInfo(file, path), prev_res);
       }
     }
+  }
+
+  const rootFile = resolveTemplate(config, config.build.rootFile);
+  let prev: any = undefined
+  for (const step of config.build.slashPipeline) {
+    if (typeof step !== "function") {
+      options.spinner?.stop();
+      log.warn(
+        "Pipeline component is not a function. Skipping. Please make sure all elements in the filePipeline are functions."
+      );
+      options.spinner?.start();
+      continue;
+    }
+  
+    prev = step(config, getFileInfo(rootFile, project_dir), prev);
   }
 
   return true;
