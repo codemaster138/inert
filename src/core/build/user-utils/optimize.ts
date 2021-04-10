@@ -47,6 +47,14 @@ export default function optimize(outFolder: string, options: OptimizeOptions) {
       ? JSON.parse(readFileSync(imageIndexPath).toString())
       : {};
 
+    if (config.custom?.dev) {
+      config.custom?.spinner?.stop();
+      config.custom?.log.info(`Skipping optimization for ${cyan(file.basename)} (Development build)`);
+      config.custom?.spinner?.start();
+      close(); // ALWAYS REMEBER TO CLOSE THE HASHER, ELSE THE PROGRAM WON'T END
+      return; // Image didn't change; no need to optimize
+    }
+
     const source = readFileSync(file.path);
     const spinner_text = config.custom?.spinner?.text;
     if (config.custom?.spinner)

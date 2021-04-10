@@ -12,6 +12,7 @@ import { getFileInfo } from "./utils/file";
 export interface BuildOptions {
   logging?: boolean;
   verbose?: boolean;
+  development?: boolean;
   spinner?: Ora;
 }
 
@@ -21,6 +22,9 @@ export interface BuildOptions {
 export default async function build(options: BuildOptions) {
   // Create a logger. The logger allows us to disable logging.
   const log = new Logger(options.logging, options.verbose ?? true);
+  options.spinner?.stop();
+  if (options.development) log.info('DEVELOPMENT BUILD');
+  options.spinner?.start();
 
   // Constants
   const project_dir = resolve(process.cwd());
@@ -43,6 +47,7 @@ export default async function build(options: BuildOptions) {
   config.custom = config.custom || {};
   config.custom.spinner = options.spinner;
   config.custom.log = log;
+  config.custom.dev = options.development;
 
   // Make sure each source directory exists
   if (

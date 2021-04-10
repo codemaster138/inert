@@ -11,10 +11,15 @@ export const buildCommand = new Command("build")
     description: 'Watch the project for changes',
     type: 'boolean',
   })
+  .option('D', {
+    alias: ['dev', 'development'],
+    description: 'Development build. Skip slow tasks like image optimization, etc',
+    type: 'boolean'
+  })
   .handler(async (argv: { [key: string]: any }) => {
     const spinner = ora({ text: 'Building project', indent: 0 }).start();
     const start = performance.now();
-    const successState = await build({ logging: true, spinner: spinner });
+    const successState = await build({ logging: true, spinner: spinner, development: argv.D || false });
     spinner.stop();
     console.log();
     spinner.start();
