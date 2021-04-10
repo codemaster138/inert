@@ -1,5 +1,5 @@
 {
-  "name": "inert",
+  "name": "inert-ssg",
   "version": "2.0.0-alpha",
   "description": "A static site generator for the modern web",
   "main": "dist/core/index.js",

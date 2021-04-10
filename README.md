@@ -8,12 +8,12 @@ Inert is a static site generator for the modern web
 
 Via NPM:
 ```bash
-npm i -g inert
+npm i -g inert-ssg
 ```
 
 Via Yarn:
 ```bash
-yarn global add inert
+yarn global add inert-ssg
 ```
 
 ## API Documentation
