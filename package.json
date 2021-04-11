@@ -1,6 +1,6 @@
 {
   "name": "inert-ssg",
-  "version": "2.0.1-alpha",
+  "version": "2.0.0-alpha.1",
   "description": "A static site generator for the modern web",
   "main": "dist/core/index.js",
   "scripts": {
@@ -34,7 +34,7 @@
     "image-size": "^0.9.7",
     "markdown-it": "^12.0.4",
     "multimatch": "^5.0.0",
-    "node-image-hash-improved": "^1.0.8",
+    "node-image-hash": "^1.1.0",
     "ora": "^5.4.0",
     "prismjs": "^1.23.0",
     "sass": "^1.32.8",

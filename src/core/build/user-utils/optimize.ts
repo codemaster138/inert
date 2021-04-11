@@ -6,7 +6,7 @@ import sharp from "sharp";
 import { resolve, join } from "path";
 import { resolveOutDir } from "../utils/dirs";
 import { cyan } from "chalk";
-import { hash as imageHash, close } from "node-image-hash-improved";
+import { hash as imageHash, close } from "node-image-hash";
 
 export interface OptimizeOptions {
   /**
