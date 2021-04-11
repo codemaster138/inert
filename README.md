@@ -6,6 +6,8 @@ Inert is a static site generator for the modern web
 ## Installation
 > If you have used Inert 1 on your machine in the past, you will need to uninstall it (`npm rm -g inert-cli`).
 
+> !! For inert's dependency `sharp` to install correctly, make sure to use *npm v7!* !!
+
 Via NPM:
 ```bash
 npm i -g inert-ssg
