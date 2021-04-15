@@ -1,9 +1,9 @@
 # Inert Static Site Generator
-> This package is now also available on [radicle](https://radicle.xyz): `rad:git:hwd1yreyhfpz5rwonsft83c9gxdsunhet3kxasqp5uhanfzaogwkz1681ga`
-
 Inert is a static site generator for the modern web
 
-> Inert 2 is currently still in alpha. To use Inert 1, please install [`inert-cli`](https://npmjs.com/package/inert-cli)
+> This package is now also available on [radicle](https://radicle.xyz): `rad:git:hwd1yreyhfpz5rwonsft83c9gxdsunhet3kxasqp5uhanfzaogwkz1681ga`
+
+Inert 2 is currently still in alpha. To use Inert 1, please install [`inert-cli`](https://npmjs.com/package/inert-cli)
 
 ## Installation
 > If you have used Inert 1 on your machine in the past, you will need to uninstall it (`npm rm -g inert-cli`).
