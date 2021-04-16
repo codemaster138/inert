@@ -1,6 +1,6 @@
 import { InertConfig, InertFile } from "../types";
 import { promises as fsPromises } from "fs";
-import { resolve } from "path";
+import { resolve, dirname } from "path";
 import { resolveOutDir } from "../utils/dirs";
 import { cyan } from "chalk";
 
@@ -13,6 +13,7 @@ export default function copy(destination: string) {
     config.custom?.log?.verb(`Copying file ${cyan(file.relative)}`);
     config.custom?.spinner?.start();
     const _destination = resolve(process.cwd(), resolveOutDir(config, config.build.outDirs[destination]), file.relative);
+    await fsPromises.mkdir(dirname(_destination), { recursive: true });
     await fsPromises.copyFile(file.path, _destination);
     return previous;
   };
