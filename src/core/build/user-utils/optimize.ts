@@ -82,7 +82,7 @@ export default function optimize(outFolder: string, options: OptimizeOptions) {
       config.custom.spinner.text = `Optimizing image: ${cyan(file.basename)}`;
 
     const resolution = imageSize(source);
-    const path_extless = file.inProject.slice(0, -file.extension.length);
+    const path_extless = file.relative.slice(0, -file.extension.length);
     const fullSize = await sharp(source).webp({ lossless: true }).toBuffer();
     mkdirSync(
       resolve(
