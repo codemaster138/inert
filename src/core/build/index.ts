@@ -98,6 +98,11 @@ export default async function build(options: BuildOptions) {
       false,
       folder.build.traverseLevel === "rescursive" ? true : false
     )) as string[];
+    options.spinner?.stop();
+    log.verb();
+    log.verb(`Traverse yielded ${cyan(path)}`);
+    log.verb();
+    options.spinner?.start();
     // Iterate over all files
     for (const file of files) {
       // Run the build pipeline
