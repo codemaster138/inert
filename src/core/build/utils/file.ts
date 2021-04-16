@@ -4,7 +4,7 @@ import { extname, basename, dirname } from "path";
  * Get information about a file
  * @param path Path to file
  */
-export function getFileInfo(path: string, relative: string, project: string) {
+export function getFileInfo(path: string, relative: string, project: string, output: string) {
   return {
     path,
     extension: extname(path),
@@ -12,6 +12,7 @@ export function getFileInfo(path: string, relative: string, project: string) {
     withoutExtension: basename(path, extname(path)),
     dirname: dirname(path),
     relative: path.slice(relative.length + 1),
-    inProject: path.slice(project.length + 1)
+    inProject: path.slice(project.length + 1),
+    inOutput: path.slice(output.length)
   }
 }

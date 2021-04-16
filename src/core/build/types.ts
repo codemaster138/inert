@@ -51,4 +51,5 @@ export interface InertFile {
   dirname: string;
   relative: string;
   inProject: string;
+  inOutput: string;
 }
