@@ -1,6 +1,6 @@
 import { InertConfig, InertFile } from "../types";
-import { resolve } from "path";
-import { writeFileSync } from "fs";
+import { resolve, basename } from "path";
+import { writeFileSync, mkdirSync } from "fs";
 import { resolveOutDir } from "../utils/dirs";
 
 /**
@@ -40,6 +40,9 @@ export default function write(
         resolveOutDir(config, config.build.outDirs[outFolder]),
         `${file.withoutExtension}${ext || file.extension}`
       );
+
+    mkdirSync(basename(outPath), { recursive: true });
+
     writeFileSync(outPath, previous);
 
     return previous;
