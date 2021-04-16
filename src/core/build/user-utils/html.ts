@@ -5,7 +5,7 @@ import htmlFormat from "html-format";
 import { resolve } from "path";
 import { resolveTemplate } from "../utils/dirs";
 
-export default function htmlBuild(template: string, locale?: any) {
+export default function htmlBuild(template: string, locale?: any, format?: boolean) {
   return (config: InertConfig, _file: InertFile, data: any) => {
     const html = render(
       readFileSync(
@@ -25,13 +25,13 @@ export default function htmlBuild(template: string, locale?: any) {
       }
     );
 
-    const formatted = htmlFormat(html);
+    const formatted = format ? htmlFormat(html) : html;
 
     return formatted;
   };
 }
 
-export function single(locale?: any) {
+export function single(locale?: any, format?: boolean) {
   return (config: InertConfig, file: InertFile, data: any) => {
     const html = render(
       readFileSync(
@@ -46,7 +46,7 @@ export function single(locale?: any) {
       }
     );
 
-    const formatted = htmlFormat(html);
+    const formatted = format ? htmlFormat(html) : html;
 
     return formatted;
   };
