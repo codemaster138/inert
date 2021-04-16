@@ -21,7 +21,7 @@ export interface InertConfig {
     folders: {
       folder: string;
       build: {
-        traverseLevel: 'flat' | 'rescursive';
+        traverseLevel: 'flat' | 'recursive';
         filePipeline: ((config: InertConfig, file: InertFile, previous: any) => any)[];
       }
     }[];

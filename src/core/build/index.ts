@@ -96,7 +96,7 @@ export default async function build(options: BuildOptions) {
     const files = (await traverse(
       path,
       false,
-      folder.build.traverseLevel === "rescursive" ? true : false
+      folder.build.traverseLevel === "recursive" ? true : false
     )) as string[];
     options.spinner?.stop();
     log.verb();
