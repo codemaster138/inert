@@ -100,7 +100,8 @@ export default async function build(options: BuildOptions) {
     )) as string[];
     options.spinner?.stop();
     log.verb();
-    log.verb(`Traverse yielded ${cyan(path)}`);
+    log.verb(`Traverse ${cyan(path)} of  yielded`);
+    log.enabled && console.log(files);
     log.verb();
     options.spinner?.start();
     // Iterate over all files
