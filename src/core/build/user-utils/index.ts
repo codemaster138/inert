@@ -10,3 +10,4 @@ export { default as imgOptimize } from "./optimize";
 export { default as htmlBuild } from "./html";
 export { single as singleHTMLBuild } from "./html";
 export { default as markdown } from "./markdown";
+export { default as halt } from "./halt";
