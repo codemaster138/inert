@@ -60,7 +60,7 @@ export default function optimize(outFolder: string, options: OptimizeOptions) {
     if (config.custom?.spinner)
       config.custom.spinner.text = `Processing image: ${cyan(file.basename)}`;
     const hash = (await imageHash(source, 8, "hex")).hash;
-    if (imageIndex[file.inOutput]?.hash === hash) {
+    if (imageIndex[file.inProject]?.hash === hash) {
       config.custom?.spinner?.stop();
       config.custom?.log.info(`Already optimized: ${cyan(file.basename)}`);
       config.custom?.spinner?.start();
@@ -68,8 +68,8 @@ export default function optimize(outFolder: string, options: OptimizeOptions) {
       return; // Image didn't change; no need to optimize
     }
 
-    if (!imageIndex[file.inOutput]) {
-      imageIndex[file.inOutput] = {
+    if (!imageIndex[file.inProject]) {
+      imageIndex[file.inProject] = {
         hash: hash,
         srcsets: {
           // The keys will be ignored when building HTML
@@ -82,7 +82,7 @@ export default function optimize(outFolder: string, options: OptimizeOptions) {
       config.custom.spinner.text = `Optimizing image: ${cyan(file.basename)}`;
 
     const resolution = imageSize(source);
-    const path_extless = file.relative.slice(0, -file.extension.length);
+    const path_extless = file.inProject.slice(0, -file.extension.length);
     const fullSize = await sharp(source).webp({ lossless: true }).toBuffer();
     mkdirSync(
       resolve(
@@ -102,7 +102,7 @@ export default function optimize(outFolder: string, options: OptimizeOptions) {
       ),
       fullSize
     );
-    imageIndex[file.inOutput].srcsets.webp.push(
+    imageIndex[file.inProject].srcsets.webp.push(
       `${join(
         resolveOutDir(config, config.build.outDirs[outFolder]),
         `webp/${path_extless}.webp`
@@ -125,7 +125,7 @@ export default function optimize(outFolder: string, options: OptimizeOptions) {
           ),
           pngBuffer
         );
-        imageIndex[file.inOutput].srcsets.default.push(
+        imageIndex[file.inProject].srcsets.default.push(
           `${join(
             resolveOutDir(config, config.build.outDirs[outFolder]),
             `${path_extless}-${width}w.png`
@@ -145,7 +145,7 @@ export default function optimize(outFolder: string, options: OptimizeOptions) {
           ),
           jpegBuffer
         );
-        imageIndex[file.inOutput].srcsets.default.push(
+        imageIndex[file.inProject].srcsets.default.push(
           `${join(
             resolveOutDir(config, config.build.outDirs[outFolder]),
             `${path_extless}-${width}w.jpg`
@@ -164,7 +164,7 @@ export default function optimize(outFolder: string, options: OptimizeOptions) {
         ),
         webpBuffer
       );
-      imageIndex[file.inOutput].srcsets.webp.push(
+      imageIndex[file.inProject].srcsets.webp.push(
         `${join(
           resolveOutDir(config, config.build.outDirs[outFolder]),
           `webp/${path_extless}-${width}w.webp`
