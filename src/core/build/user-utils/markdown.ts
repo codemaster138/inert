@@ -4,6 +4,7 @@ import MarkdownIt from "markdown-it";
 import Prism from "prismjs";
 import fm from "front-matter";
 import { cyan } from "chalk";
+import { getOptimizedImage } from ".";
 // Load all prism-supported languages
 require("prismjs/components/index")();
 
@@ -24,12 +25,21 @@ export default function markdown(markdownItOptions?: MarkdownIt.Options) {
 
         return `<pre class="lang-${lang}"><code>${str}</code></pre>`;
       },
+      linkify: true,
     };
 
     const compiler = new MarkdownIt({
       ...default_options,
       ...(markdownItOptions || {}),
     });
+
+    const defaultImage = compiler.renderer.rules.image || (() => '');
+    compiler.renderer.rules.image = (tokens, idx, options, env, self): string => {
+      const token = tokens[idx];
+      const srcIdx = token.attrIndex('src');
+
+      return getOptimizedImage(config, token.attrs?.[srcIdx][1] || '') || defaultImage(tokens, idx, options, env, self);
+    };
 
     const spinner_text = config.custom?.spinner?.text;
     if (config.custom?.spinner)

@@ -11,3 +11,4 @@ export { default as htmlBuild } from "./html";
 export { single as singleHTMLBuild } from "./html";
 export { default as markdown } from "./markdown";
 export { default as halt } from "./halt";
+export { default as getOptimizedImage } from "./image";
