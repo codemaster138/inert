@@ -1,6 +1,6 @@
 {
   "name": "inert-ssg",
-  "version": "2.0.0-alpha.22",
+  "version": "2.0.0-alpha.23",
   "description": "A static site generator for the modern web",
   "main": "dist/core/index.js",
   "scripts": {
