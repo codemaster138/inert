@@ -5,7 +5,7 @@ import htmlFormat from "html-format";
 import { resolve } from "path";
 import { resolveTemplate } from "../utils/dirs";
 
-export default function htmlBuild(template: string) {
+export default function htmlBuild(template: string, locale?: any) {
   return (config: InertConfig, _file: InertFile, data: any) => {
     const html = render(
       readFileSync(
@@ -17,6 +17,7 @@ export default function htmlBuild(template: string) {
       {
         config: config,
         data: data,
+        locale: locale
       },
       {
         async: false,
@@ -29,7 +30,7 @@ export default function htmlBuild(template: string) {
   };
 }
 
-export function single() {
+export function single(locale?: any) {
   return (config: InertConfig, file: InertFile, data: any) => {
     const html = render(
       readFileSync(
@@ -37,7 +38,8 @@ export function single() {
       ).toString(),
       {
         config: config,
-        data: data
+        data: data,
+        locale: locale
       }, {
         async: false
       }
