@@ -104,7 +104,7 @@ export default function optimize(outFolder: string, options: OptimizeOptions) {
     );
     imageIndex[file.inProject].srcsets.webp.push(
       `${join(
-        resolveOutDir(config, config.build.outDirs[outFolder]).slice(0, -resolveOutDir(config, ':output:').length),
+        resolveOutDir(config, config.build.outDirs[outFolder]).slice(resolveOutDir(config, ':output:').length + 1),
         `webp/${path_extless}.webp`
       )} ${resolution.width}w`
     );
@@ -127,7 +127,7 @@ export default function optimize(outFolder: string, options: OptimizeOptions) {
         );
         imageIndex[file.inProject].srcsets.default.push(
           `${join(
-            resolveOutDir(config, config.build.outDirs[outFolder]).slice(0, -resolveOutDir(config, ':output:').length),
+            resolveOutDir(config, config.build.outDirs[outFolder]).slice(resolveOutDir(config, ':output:').length + 1),
             `${path_extless}-${width}w.png`
           )} ${width}w`
         );
@@ -147,7 +147,7 @@ export default function optimize(outFolder: string, options: OptimizeOptions) {
         );
         imageIndex[file.inProject].srcsets.default.push(
           `${join(
-            resolveOutDir(config, config.build.outDirs[outFolder]).slice(0, -resolveOutDir(config, ':output:').length),
+            resolveOutDir(config, config.build.outDirs[outFolder]).slice(resolveOutDir(config, ':output:').length + 1),
             `${path_extless}-${width}w.jpg`
           )} ${width}w`
         );
@@ -166,7 +166,7 @@ export default function optimize(outFolder: string, options: OptimizeOptions) {
       );
       imageIndex[file.inProject].srcsets.webp.push(
         `${join(
-          resolveOutDir(config, config.build.outDirs[outFolder]).slice(0, -resolveOutDir(config, ':output:').length),
+          resolveOutDir(config, config.build.outDirs[outFolder]).slice(resolveOutDir(config, ':output:').length + 1),
           `webp/${path_extless}-${width}w.webp`
         )} ${width}w`
       );
