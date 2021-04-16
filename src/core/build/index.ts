@@ -118,7 +118,7 @@ export default async function build(options: BuildOptions) {
           options.spinner?.start();
           continue;
         }
-        prev_res = await step(config, getFileInfo(file, path), prev_res);
+        prev_res = await step(config, getFileInfo(file, path, project_dir), prev_res);
       }
     }
 
@@ -139,7 +139,7 @@ export default async function build(options: BuildOptions) {
       continue;
     }
   
-    prev = step(config, getFileInfo(rootFile, project_dir), prev);
+    prev = step(config, getFileInfo(rootFile, project_dir, project_dir), prev);
   }
 
   return true;
