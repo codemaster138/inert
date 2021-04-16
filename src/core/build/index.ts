@@ -115,6 +115,10 @@ export default async function build(options: BuildOptions) {
         prev_res = await step(config, getFileInfo(file, path), prev_res);
       }
     }
+
+    options.spinner?.stop();
+    log.verb(`Done building ${cyan(path)}`);
+    options.spinner?.start();
   }
 
   const rootFile = resolveTemplate(config, config.build.rootFile);
