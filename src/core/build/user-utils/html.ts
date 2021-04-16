@@ -17,7 +17,8 @@ export default function htmlBuild(template: string, locale?: any) {
       {
         config: config,
         data: data,
-        locale: locale
+        locale: locale,
+        file: _file
       },
       {
         async: false,
@@ -39,8 +40,7 @@ export function single(locale?: any) {
       {
         config: config,
         data: data,
-        locale: locale,
-        file: file
+        locale: locale
       }, {
         async: false
       }
