@@ -39,7 +39,8 @@ export function single(locale?: any) {
       {
         config: config,
         data: data,
-        locale: locale
+        locale: locale,
+        file: file
       }, {
         async: false
       }
