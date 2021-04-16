@@ -8,7 +8,7 @@ import { resolveOutDir } from "../utils/dirs";
  */
 export default function copy(destination: string) {
   return async (config: InertConfig, file: InertFile, previous: any) => {
-    const _destination = resolve(process.cwd(), resolveOutDir(config, config.build.outDirs[destination]), file.basename);
+    const _destination = resolve(process.cwd(), resolveOutDir(config, config.build.outDirs[destination]), file.relative);
     await fsPromises.copyFile(file.path, _destination);
     return previous;
   };
