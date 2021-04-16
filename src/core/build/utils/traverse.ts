@@ -15,7 +15,7 @@ export default async function traverse(path: string, keepFolders: boolean = true
   var result = contents;
   if (recursive) {
     const promises = contents.map(p => traverse(p, keepFolders, true));
-    result = (await Promise.all(promises) as string[]);
+    result = (await Promise.all(promises) as string[]).reduce<string[]>((acc: string[], val: string | string[]) => acc.concat(val), []);
   }
 
   if (!keepFolders) {
