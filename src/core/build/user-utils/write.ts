@@ -1,5 +1,5 @@
 import { InertConfig, InertFile } from "../types";
-import { resolve, basename } from "path";
+import { resolve, dirname } from "path";
 import { writeFileSync, mkdirSync } from "fs";
 import { resolveOutDir } from "../utils/dirs";
 
@@ -41,7 +41,7 @@ export default function write(
         `${file.withoutExtension}${ext || file.extension}`
       );
 
-    mkdirSync(basename(outPath), { recursive: true });
+    mkdirSync(dirname(outPath), { recursive: true });
 
     writeFileSync(outPath, previous);
 
