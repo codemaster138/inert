@@ -27,5 +27,5 @@ export default function image(
     imageIndex[name.replace(/^\/+/, '')].srcsets
   ).map(
     (srcset) => `<source srcset="${(srcset as string[]).join(", ")}"/>`
-  ).join('')}<img src="${name}"/></picture$>`;
+  ).join('')}<img src="${name}"/></picture>`;
 }
