@@ -21,9 +21,9 @@ export default function image(
     ? JSON.parse(readFileSync(imageIndexPath).toString())
     : {};
 
-  if (!imageIndex[name]) return false;
+  if (!imageIndex[name.replace(/^\/+/, '')]) return false;
   return `<picture>${Object.values(
-    imageIndex[name].srcsets
+    imageIndex[name.replace(/^\/+/, '')].srcsets
   ).map(
     (srcset) => `<source srcset="${(srcset as string[]).join(", ")}"/>`
   )}<img src="${name}"/></picture>`;
