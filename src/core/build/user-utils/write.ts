@@ -58,6 +58,7 @@ export function writeFile(path: string) {
     }
 
     const outPath = resolve(process.cwd(), resolveOutDir(config, path));
+    mkdirSync(dirname(outPath), { recursive: true });
     writeFileSync(outPath, data);
 
     return data;
