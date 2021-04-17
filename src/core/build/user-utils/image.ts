@@ -9,7 +9,8 @@ import { resolveOutDir } from "../utils/dirs";
  */
 export default function image(
   config: InertConfig,
-  name: string
+  name: string,
+  id?: string
 ): string | false {
   // Load image index
   const imageIndexPath = resolve(
@@ -22,9 +23,9 @@ export default function image(
     : {};
 
   if (!imageIndex[name.replace(/^\/+/, '')]) return false;
-  return `<picture>${Object.values(
+  return `<picture${id ? ` id="${id}"` : ""}>${Object.values(
     imageIndex[name.replace(/^\/+/, '')].srcsets
   ).map(
     (srcset) => `<source srcset="${(srcset as string[]).join(", ")}"/>`
-  ).join('')}<img src="${name}"/></picture>`;
+  ).join('')}<img src="${name}"/></picture$>`;
 }
