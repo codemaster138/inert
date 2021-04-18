@@ -5,6 +5,7 @@ import Prism from "prismjs";
 import fm from "front-matter";
 import { cyan } from "chalk";
 import { getOptimizedImage } from ".";
+import markdownItNamedHeadings from "markdown-it-named-headings";
 // Load all prism-supported languages
 require("prismjs/components/index")();
 
@@ -32,6 +33,8 @@ export default function markdown(markdownItOptions?: MarkdownIt.Options) {
       ...default_options,
       ...(markdownItOptions || {}),
     });
+
+    compiler.use(markdownItNamedHeadings)
 
     const defaultImage = compiler.renderer.rules.image || (() => '');
     compiler.renderer.rules.image = (tokens, idx, options, env, self): string => {
