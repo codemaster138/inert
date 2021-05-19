@@ -51,7 +51,6 @@ export default function optimize(outFolder: string, options: OptimizeOptions) {
       config.custom?.spinner?.stop();
       config.custom?.log.info(`Skipping optimization for ${cyan(file.basename)} (Development build)`);
       config.custom?.spinner?.start();
-      close(); // ALWAYS REMEBER TO CLOSE THE HASHER, ELSE THE PROGRAM WON'T END
       return; // Image didn't change; no need to optimize
     }
 
