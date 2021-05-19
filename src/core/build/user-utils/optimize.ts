@@ -6,7 +6,7 @@ import sharp from "sharp";
 import { resolve, join } from "path";
 import { resolveOutDir } from "../utils/dirs";
 import { cyan } from "chalk";
-import { hash as imageHash, close } from "node-image-hash";
+import { asyncChecksum } from "../utils/checksum";
 
 export interface OptimizeOptions {
   /**
@@ -59,12 +59,13 @@ export default function optimize(outFolder: string, options: OptimizeOptions) {
     const spinner_text = config.custom?.spinner?.text;
     if (config.custom?.spinner)
       config.custom.spinner.text = `Processing image: ${cyan(file.basename)}`;
-    const hash = (await imageHash(source, 8, "hex")).hash;
+
+    const hash = (await asyncChecksum(file.path));
+
     if (imageIndex[file.inProject]?.hash === hash) {
       config.custom?.spinner?.stop();
       config.custom?.log.info(`Already optimized: ${cyan(file.basename)}`);
       config.custom?.spinner?.start();
-      close(); // ALWAYS REMEBER TO CLOSE THE HASHER, ELSE THE PROGRAM WON'T END
       return; // Image didn't change; no need to optimize
     }
 
@@ -173,9 +174,6 @@ export default function optimize(outFolder: string, options: OptimizeOptions) {
     }
     if (config.custom?.spinner) config.custom.spinner.text = spinner_text;
     writeFileSync(imageIndexPath, JSON.stringify(imageIndex, undefined, 2));
-
-    // Close all running hash instances
-    close();
     return previous;
   };
 }
