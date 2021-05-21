@@ -57,9 +57,10 @@ export default function markdown(
     ): string => {
       const token = tokens[idx];
       const srcIdx = token.attrIndex("src");
+      const altIdx = token.attrIndex("alt");
 
       return (
-        getOptimizedImage(config, token.attrs?.[srcIdx][1] || "") ||
+        getOptimizedImage(config, token.attrs?.[srcIdx][1] || "", token.attrs?.[altIdx]?.[1]) ||
         defaultImage(tokens, idx, options, env, self)
       );
     };

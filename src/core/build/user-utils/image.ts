@@ -10,6 +10,7 @@ import { resolveOutDir } from "../utils/dirs";
 export default function image(
   config: InertConfig,
   name: string,
+  alt?: string,
   id?: string
 ): string | false {
   // Load image index
@@ -27,5 +28,5 @@ export default function image(
     imageIndex[name.replace(/^\/+/, '')].srcsets
   ).map(
     (srcset) => `<source srcset="${(srcset as string[]).join(", ")}"/>`
-  ).join('')}<img src="${name}"/></picture>`;
+  ).join('')}<img src="${name}" alt="${alt || ""}"/></picture>`;
 }
