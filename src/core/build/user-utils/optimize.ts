@@ -6,7 +6,7 @@ import sharp from "sharp";
 import { resolve, join, dirname } from "path";
 import { resolveOutDir } from "../utils/dirs";
 import { cyan } from "chalk";
-import { asyncChecksum } from "../utils/checksum";
+import { asyncChecksum } from "../utils/checksum";
 
 export interface OptimizeOptions {
   /**
@@ -49,7 +49,9 @@ export default function optimize(outFolder: string, options: OptimizeOptions) {
 
     if (config.custom?.dev) {
       config.custom?.spinner?.stop();
-      config.custom?.log.info(`Skipping optimization for ${cyan(file.basename)} (Development build)`);
+      config.custom?.log.info(
+        `Skipping optimization for ${cyan(file.basename)} (Development build)`
+      );
       config.custom?.spinner?.start();
       return; // Image didn't change; no need to optimize
     }
@@ -59,7 +61,7 @@ export default function optimize(outFolder: string, options: OptimizeOptions) {
     if (config.custom?.spinner)
       config.custom.spinner.text = `Processing image: ${cyan(file.basename)}`;
 
-    const hash = (await asyncChecksum(file.path));
+    const hash = await asyncChecksum(file.path);
 
     if (imageIndex[file.inProject]?.hash === hash) {
       config.custom?.spinner?.stop();
@@ -88,11 +90,19 @@ export default function optimize(outFolder: string, options: OptimizeOptions) {
       resolve(
         process.cwd(),
         resolveOutDir(config, config.build.outDirs[outFolder]),
-        `webp/${path_extless.includes('/') ? dirname(path_extless) : ''}`
+        `webp/${path_extless.includes("/") ? dirname(path_extless) : ""}`
       ),
       {
         recursive: true,
       }
+    );
+    mkdirSync(
+      resolve(
+        process.cwd(),
+        resolveOutDir(config, config.build.outDirs[outFolder]),
+        dirname(path_extless)
+      ),
+      { recursive: true }
     );
     writeFileSync(
       resolve(
@@ -104,7 +114,9 @@ export default function optimize(outFolder: string, options: OptimizeOptions) {
     );
     imageIndex[file.inProject].srcsets.webp.push(
       `${join(
-        resolveOutDir(config, config.build.outDirs[outFolder]).slice(resolveOutDir(config, ':output:').length),
+        resolveOutDir(config, config.build.outDirs[outFolder]).slice(
+          resolveOutDir(config, ":output:").length
+        ),
         `webp/${path_extless}.webp`
       )} ${resolution.width}w`
     );
@@ -127,7 +139,9 @@ export default function optimize(outFolder: string, options: OptimizeOptions) {
         );
         imageIndex[file.inProject].srcsets.default.push(
           `${join(
-            resolveOutDir(config, config.build.outDirs[outFolder]).slice(resolveOutDir(config, ':output:').length),
+            resolveOutDir(config, config.build.outDirs[outFolder]).slice(
+              resolveOutDir(config, ":output:").length
+            ),
             `${path_extless}-${width}w.png`
           )} ${width}w`
         );
@@ -147,7 +161,9 @@ export default function optimize(outFolder: string, options: OptimizeOptions) {
         );
         imageIndex[file.inProject].srcsets.default.push(
           `${join(
-            resolveOutDir(config, config.build.outDirs[outFolder]).slice(resolveOutDir(config, ':output:').length),
+            resolveOutDir(config, config.build.outDirs[outFolder]).slice(
+              resolveOutDir(config, ":output:").length
+            ),
             `${path_extless}-${width}w.jpg`
           )} ${width}w`
         );
@@ -166,7 +182,9 @@ export default function optimize(outFolder: string, options: OptimizeOptions) {
       );
       imageIndex[file.inProject].srcsets.webp.push(
         `${join(
-          resolveOutDir(config, config.build.outDirs[outFolder]).slice(resolveOutDir(config, ':output:').length),
+          resolveOutDir(config, config.build.outDirs[outFolder]).slice(
+            resolveOutDir(config, ":output:").length
+          ),
           `webp/${path_extless}-${width}w.webp`
         )} ${width}w`
       );
