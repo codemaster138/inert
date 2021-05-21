@@ -3,7 +3,7 @@ import { InertConfig, InertFile } from "../types";
 import imageSize from "image-size";
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "fs";
 import sharp from "sharp";
-import { resolve, join } from "path";
+import { resolve, join, dirname } from "path";
 import { resolveOutDir } from "../utils/dirs";
 import { cyan } from "chalk";
 import { asyncChecksum } from "../utils/checksum";
@@ -88,7 +88,7 @@ export default function optimize(outFolder: string, options: OptimizeOptions) {
       resolve(
         process.cwd(),
         resolveOutDir(config, config.build.outDirs[outFolder]),
-        `webp/`
+        `webp/${path_extless.includes('/') ? dirname(path_extless) : ''}`
       ),
       {
         recursive: true,
